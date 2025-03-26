@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./test-auth-api
+      dockerfile: Dockerfile
+    container_name: api
+    ports:
+      - "8889:8889"
+    networks:
+      - my_network
+    depends_on:
+      - user-service
+      - subject-service
+
+  user-service:
+    build:
+      context: ./test-subject-service
+      dockerfile: Dockerfile
+    container_name: subject-service
+    ports:
+      - "9998:9998"
+    networks:
+      - my_network
+
+  subject-service:
+    build:
+      context: ./test-user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "9999:9999"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
